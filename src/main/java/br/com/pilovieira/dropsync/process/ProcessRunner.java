@@ -1,4 +1,7 @@
-package br.com.pilovieira.dropsync;
+package br.com.pilovieira.dropsync.process;
+
+import static br.com.pilovieira.dropsync.process.DropFile.getData;
+import static br.com.pilovieira.dropsync.process.DropFile.isValid;
 
 import java.io.File;
 
@@ -11,14 +14,15 @@ public class ProcessRunner {
         	if (isValid(file))
         		getProcess(source, file, targetPath).run();
         
-        for (File file : source.listFiles())
-        	file.delete();
+        deleteValidFiles(source);
     }
-	
-    private static boolean isValid(File file) {
-    	return file.getName().matches("\\d{4}-\\d{2}-\\d{2} .*");
-    }
-    
+
+	private static void deleteValidFiles(File source) {
+		for (File file : source.listFiles())
+        	if (isValid(file))
+        		file.delete();
+	}
+		
 	private static Process getProcess(File source, File file, String targetPath) {
 		System.out.println("processing file: " + file.getName());
 		
@@ -29,11 +33,9 @@ public class ProcessRunner {
 	}
 	
 	private static boolean isForAlbum(File file, File source) {
-		String data = file.getName().split(" ")[0];
-		
 		int i = 0;
 		for (File f: source.listFiles())
-			if (f.getName().contains(data))
+			if (f.getName().contains(getData(file)))
 				i++;
 		
 		return i > 2;

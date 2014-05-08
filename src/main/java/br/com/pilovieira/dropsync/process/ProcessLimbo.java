@@ -1,6 +1,7 @@
-package br.com.pilovieira.dropsync;
+package br.com.pilovieira.dropsync.process;
 
 import java.io.File;
+
 
 public class ProcessLimbo extends Process {
 	
@@ -9,10 +10,7 @@ public class ProcessLimbo extends Process {
 	}
 
 	@Override
-	protected File makePath(File file) {
-		File limboPath = new File(targetPath + "\\Celular");
-		limboPath.mkdirs();
-		
-		return limboPath;
+	protected String makeStringPath() {
+		return targetPath + "\\" + DropFile.getAno(sourceFile) + "\\Celular";
 	}
 }
