@@ -1,4 +1,4 @@
-package br.com.pilovieira.dropsync;
+package br.com.pilovieira.dropsync.process;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +9,7 @@ import java.nio.channels.FileChannel;
 public abstract class Process {
 	    
 	protected String targetPath;
-	private File sourceFile;
+	protected File sourceFile;
 	
 	public Process(File sourceFile, String targetPath) {
 		this.sourceFile = sourceFile;
@@ -17,9 +17,7 @@ public abstract class Process {
 	}
 		
     public void run() {
-    	String destinationPath = makePath(sourceFile).getAbsolutePath();
-    	File destinationFile = new File(destinationPath + "\\" + sourceFile.getName());
-    	
+    	File destinationFile = makeDestinationFile();
     	try {
 			copyFile(sourceFile, destinationFile);
 		} catch (IOException e) {
@@ -27,7 +25,7 @@ public abstract class Process {
 		}
     }
 
-	protected abstract File makePath(File file);
+	protected abstract String makeStringPath();
 	    
 	private void copyFile(File source, File destination) throws IOException {
 		if (destination.exists())
@@ -47,5 +45,17 @@ public abstract class Process {
 			if (destinationChannel != null && destinationChannel.isOpen())
 				destinationChannel.close();
 		}
+	}
+
+	private File makeDestinationFile() {
+		String destinationPath = makePathDirs().getAbsolutePath();
+		File destinationFile = new File(destinationPath + "\\" + sourceFile.getName());
+		return destinationFile;
+	}
+
+	private File makePathDirs() {
+		File directory = new File(makeStringPath());
+		directory.mkdirs();
+		return directory;
 	}
 }
