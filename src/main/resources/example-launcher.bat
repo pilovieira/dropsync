@@ -1,0 +1,1 @@
+java -jar "C:\\Program Files\\DropSync\\dropsync-0.0.1.jar" "D:\\Luiz Paulo\\Dropbox\\Camera Uploads" "D:\\Luiz Paulo\\Imagens\\Fotos"
